@@ -5,14 +5,15 @@ with orgs as  (
 contacts as (
 
     select 
-        pc_fivetran_db.pg_public.contacts_contact.id as contact_id,
-        pc_fivetran_db.pg_public.contacts_contact.name as contact_name,
-        pc_fivetran_db.pg_public.contacts_contact.created_on,
-        pc_fivetran_db.pg_public.contacts_contact.last_seen_on,
-        year(pc_fivetran_db.pg_public.contacts_contact.modified_on) as year,
-        pc_fivetran_db.pg_public.contacts_contact.org_id,
-        pc_fivetran_db.pg_public.contacts_contact.language
-    from pc_fivetran_db.pg_public.contacts_contact
+        airbyte_db.ccl.contacts_contact.id as contact_id,
+        airbyte_db.ccl.contacts_contact.name as contact_name,
+        airbyte_db.ccl.contacts_contact.created_on,
+        airbyte_db.ccl.contacts_contact.last_seen_on,
+        airbyte_db.ccl.contacts_contact.org_id,
+        airbyte_db.ccl.contacts_contact.fields,
+        airbyte_db.ccl.contacts_contact.is_active,
+        airbyte_db.ccl.contacts_contact.language
+    from airbyte_db.ccl.contacts_contact
 ),
 
 final as (
@@ -21,7 +22,8 @@ final as (
         contacts.contact_name,
         contacts.created_on,
         contacts.language,
-        contacts.year,
+        contacts.fields,
+        contacts.is_active,
         contacts.last_seen_on,
         orgs.org_name,
         orgs.org_id
@@ -31,5 +33,6 @@ final as (
 )
 
 select * from final
+
 
 
