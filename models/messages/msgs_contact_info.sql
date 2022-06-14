@@ -26,6 +26,13 @@ msg_urns as (
         msgs.uuid as msg_uuid,
         msgs.contact_urn_id as contact_urn,
         msgs.contact_id as contact_id,
+        year(date(msgs.sent_on)) as year_created,
+        month(date(msgs.sent_on)) as months,
+        CASE
+            WHEN msgs.EXTERNAL_ID like '%MM%' then 'MMS'
+            WHEN msgs.EXTERNAL_ID like '%SM%' then 'SMS'
+            else msgs.EXTERNAL_ID
+        END as msg_type,
         urns.contact,
         urns.org_name,
         urns.channel
@@ -36,28 +43,20 @@ msg_urns as (
 
 msgs_full_contacts as (
     select 
-        msg_urns.msg_id,
-        msg_urns.msg_uuid,
-        msg_urns.message,
-        msg_urns.org_id,
-        msg_urns.sent_on,
-        msg_urns.error_count,
-        msg_urns.direction,
-        msg_urns.msg_count,
-        msg_urns.channel_id,
-        msg_urns.next_attempt,
-        msg_urns.response_to_id,
-        msg_urns.contact_urn,
-        msg_urns.contact_id,
-        msg_urns.contact,
-        msg_urns.org_name,
-        msg_urns.channel,
+        msg_urns.*,
         contacts.contact_name,
         contacts.created_on as contact_created_date,
         contacts.last_seen_on as contact_last_seen,
         contacts.fields,
         contacts.is_active as is_contact_active,
-        contacts.language
+        CASE
+            WHEN upper(contacts.language) like upper('%eng%') then 'English'
+            WHEN contacts.language is null then 'English'
+            WHEN upper(contacts.language) like upper('%spa%') then 'Spanish'
+            WHEN upper(contacts.language) like upper('%vie%') then 'Vietnamese'
+            WHEN upper(contacts.language) like upper('%chi%') then 'Chinese'
+            else contacts.language
+        END as lang 
     from msg_urns
 
     left join contacts on msg_urns.contact_id = contacts.contact_id
