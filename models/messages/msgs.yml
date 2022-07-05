@@ -1,0 +1,61 @@
+version: 2
+
+models: 
+  - name: msgs_msg
+    description: table with every message, inbound&outbound, through CCL's platform
+    columns:
+      - name: id
+        description: A primary key for the message
+        tests:
+          - unique
+          - not_null
+      - name: text
+        description: The content of the message
+        tests:
+      - name: uuid
+        description: UUID of the message instance on the CCL Platform
+        tests:
+          - not_null
+      - name: org_id
+        description: Organization ID for the account the message was sent/received through
+      - name: status
+      - name: sent_on
+        description: The timestamp the message was sent
+      - name: metadata
+        description: Metadata
+      - name: msg_type
+        description: Message type
+      - name: top_up_id
+        description: UUID of the message instance on the CCL Platform
+      - name: direction
+        description: Direction of message. I=inbound, O = outbound
+      - name: msg_count
+        description: number os segments
+      - name: queued_on
+        description: Timestamp message was queued to be sent
+      - name: channel_id
+        description: 'id specific channel that the message came through, refer to channels_channel:ID'
+      - name: created_on
+        description: The timestamp the instance was created
+      - name: contact_id
+        description: 'The contact_id associated with the message. For Outbound messages it is the ID of the receiver, and for inbound messages it is the ID of the sender. Refer to contacts_contact:ID'
+      - name: VISIBILITY
+      - name: next_attempt
+      - name: modified_on
+      - name: attachments
+      - name: error_count
+        description: number of errors that occurred during the message send attempt
+      - name: external_id
+      - name: broadcast_id
+      - name: next_attempt
+      - name: connection_id
+      - name: delete_reason
+      - name: high_priority
+      - name: contact_urn_id
+        description: The contact's Unique Reference Number
+      - name: response_to_id
+
+
+
+
+
