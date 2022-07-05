@@ -11,6 +11,10 @@ urns as  (
     select * from {{ ref('stg_urns' )}}
 ),
 
+orgs as(
+    select * from {{ref('stg_orgs')}}
+),
+
 msg_urns as (
     select 
         msgs.id as msg_id,
@@ -60,5 +64,13 @@ msgs_full_contacts as (
     from msg_urns
 
     left join contacts on msg_urns.contact_id = contacts.contact_id
+),
+
+final as (
+    select
+        msgs_full_contacts.*
+    from msgs_full_contacts
+
+    inner join orgs on msgs_full_contacts.org_id = orgs.org_id
 )
-select * from msgs_full_contacts
+select * from final
